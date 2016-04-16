@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+const sink = require('stream-sink')
+const Forecast = require('forecast.io')
+const key = 'a861b529093b43142fb79f77493c78b3'
+
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+
+process.stdin.pipe(sink())
+.on('data', (input) => {
+	input = JSON.parse(input)
+	if (!input.latitude || !input.longitude) return out({status: 'error'})
+
+	new Forecast({APIKey: key})
+	.get(input.latitude, input.longitude, (err, _, data) => {
+		if (err) return out(Object.assign(err, {status: 'error'}))
+		out({status: 'ok', text: data.daily.summary})
+	})
+
+})
