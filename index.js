@@ -9,12 +9,13 @@ app.get('/:bot', function (req, res) {
 	fs.stat(file, function(err, stats) {
 		if (!err && stats.isFile()) {
 			var child = child_process.spawn(file)
+			res.status(200).set('Content-Type', 'application/json; charset=utf-8')
 			child.stdout.pipe(res)
 			child.stderr.pipe(process.stderr)
 			child.stdin.write(JSON.stringify(req.query))
 			child.stdin.end()
 		}else{
-			res.send('bot doesnt exist')
+			res.status(404).json({status: 'error', text: 'bot doesnt exist'})
 		}
 
 	})
