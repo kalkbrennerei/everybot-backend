@@ -4,7 +4,8 @@
   "description": "A generic REST HTTP task runner.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "deploy": "rsync -rav --delete -e 'ssh -i ./.digital-ocean.pem' --exclude '.*' --exclude 'node_modules' . root@46.101.159.129:~/everybot-backend/"
   },
   "author": "Jannis R <mail@jannisr.de>",
   "license": "ISC",
@@ -13,8 +14,5 @@
     "express": "^4.13.4",
     "stream-sink": "^1.2.0",
     "through2": "^2.0.1"
-  },
-  "scripts": {
-  	"start": "node index.js"
   }
 }
