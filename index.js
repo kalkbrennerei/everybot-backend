@@ -5,9 +5,9 @@ var child_process = require('child_process')
 var app = express()
 
 app.get('/:bot', function (req, res) {
-	fs.stat(req.params.bot, function(err, stats){
+	var file = path.join(__dirname, req.params.bot)
+	fs.stat(file, function(err, stats) {
 		if (!err && stats.isFile()) {
-			var file = path.join(__dirname, req.params.bot)
 			var child = child_process.spawn(file)
 			child.stdout.pipe(res)
 			child.stderr.pipe(process.stderr)
