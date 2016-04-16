@@ -1,1 +1,4 @@
-hier wird mal was sein
+- `git clone https://github.com/lydl28/everybot-backend`
+- `cd everybot-backend`
+- `npm install`
+- `npm start`
