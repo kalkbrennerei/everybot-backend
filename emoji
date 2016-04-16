@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+const sink = require('stream-sink')
+const emojis = require('emojilib')
+
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+
+process.stdin.pipe(sink())
+.on('data', (input) => {
+	input = JSON.parse(input)
+	if (!input.text) return out({status: 'error', text: 'missing keyword'})
+	input = input.text.trim().toLowerCase()
+
+	if (input in emojis.lib) return out({
+		status: 'ok',
+		text: emojis.lib[input].char
+	})
+	else out({status: 'error', text: 'couldnt find one'})
+
+})

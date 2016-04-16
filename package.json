@@ -9,7 +9,9 @@
   "author": "Jannis R <mail@jannisr.de>",
   "license": "ISC",
   "dependencies": {
+    "emojilib": "^2.0.2",
     "express": "^4.13.4",
+    "stream-sink": "^1.2.0",
     "through2": "^2.0.1"
   },
   "scripts": {
