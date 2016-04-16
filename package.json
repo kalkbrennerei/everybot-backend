@@ -9,6 +9,10 @@
   "author": "Jannis R <mail@jannisr.de>",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "through2": "^2.0.1"
+  },
+  "scripts": {
+  	"start": "node index.js"
   }
 }
