@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+const sink = require('stream-sink')
+const request = require('request')
+
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+const endpoint = 'http://api.fixer.io/latest?base=USD&symbols=EUR'
+
+request(endpoint, {json: true}, (err, _, body) => {
+	if (err) return out({status: 'error', text: err.message})
+	const rate = body.rates.EUR
+
+	process.stdin.pipe(sink())
+	.on('data', (input) => {
+		input = JSON.parse(input).text
+		if (!input) return out({status: 'error', text: 'missing input'})
+
+		const result = Math.round(parseFloat(input.trim()) * rate * 100) / 100
+		out({status: 'ok', text: result.toString() + '€'})
+	})
+})
