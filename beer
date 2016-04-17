@@ -21,8 +21,12 @@ process.stdin.pipe(sink())
 				.map((beer) => [
 					  beer.name
 					, '(' + (beer.price_in_cents / 100) + '$)'
+					, 'is a'
+					, beer.primary_category
 					, 'from'
-					, beer.primary_category + beer.secondary_category
+					, beer.origin
+					, 'with'
+					, (beer.alcohol_content / 100) + '%'
 				].join(' '))
 				.join('\n')
 			out({status: 'ok', text: result})
