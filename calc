@@ -16,12 +16,16 @@ for line in fileinput.input():
 
 	print(m.group(1), m.group(2), m.group(3))
 	if m.group(2) == '+':
-		print(int(num1) + int(num2))
+		print(json.dumps({"status": "ok", "text": int(num1) + int(num2)}))
+		#print(int(num1) + int(num2))
 	elif m.group(2) == '-':
-		print(int(num1) - int(num2))
+		print(json.dumps({"status": "ok", "text": int(num1) - int(num2)}))
+		#print(int(num1) - int(num2))
 	elif m.group(2) == '*':
-		print(int(num1) * int(num2))
+		print(json.dumps({"status": "ok", "text": int(num1) * int(num2)}))
+		#print(int(num1) * int(num2))
 	elif m.group(2) == '/':
-		print(int(num1) / int(num2))
+		print(json.dumps({"status": "ok", "text": int(num1) / int(num2)}))
+		#print(int(num1) / int(num2))
 	else:
-		print('error')
+		print(json.dumps({"status": "error", "text": "error"}))
