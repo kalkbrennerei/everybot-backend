@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+const sink = require('stream-sink')
+const request = require('request')
+
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+const expr = /^(\d+)\s*(\w{3})\s+in\s+(\w{3})$/
+
+process.stdin.pipe(sink())
+.on('data', (input) => {
+	input = JSON.parse(input).text
+	if (!input) return out({status: 'error', text: 'missing input'})
+
+	const parts = input.trim().match(expr).slice(1, 4)
+	parts[0] = parseFloat(parts[0])
+	parts[1] = parts[1].toUpperCase()
+	parts[2] = parts[2].toUpperCase()
+
+	request('http://api.fixer.io/latest?'
+		+ `base=${encodeURIComponent(parts[1])}`
+		+ `&symbols=${encodeURIComponent(parts[2])}`
+		, {json: true}, (err, _, body) => {
+			if (err) return out({status: 'error', text: err.message})
+			const rate = body.rates[parts[2]]
+			const result = Math.round(parts[0] * rate * 100) / 100
+			out({status: 'ok', text: result.toString() + ' ' + parts[2]})
+		})
+})
