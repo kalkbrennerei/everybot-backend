@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+
+import json
+import requests
+import urllib
+import fileinput
+from microsofttranslator import Translator
+
+
+def translate(text, to_language):
+     translator = Translator('butterknife', '8DWdIRK0yOdWalb3nLuOreETN0Eekpdo0VMITD3snJU=')
+     from_language = translator.detect_language(text)
+     output_text = translator.translate(text, to_language)
+
+     return json.dumps({"original":text, "translated":output_text})
+
+
+#HP
+API_BINGTRANSLATOR_BASE = 'http://api.microsofttranslator.com/v2/Http.svc/Translate?text='
+
+for line in fileinput.input():
+	trans = json.loads(line)
+
+text = trans['text']
+to = trans['to']
+
+print(translate(text, to))
+
