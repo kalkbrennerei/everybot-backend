@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+const sink = require('stream-sink')
+const request = require('request')
+
+const key = 'f7af1dccbf8bf29ddf01645044b90256'
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+
+process.stdin.pipe(sink())
+.on('data', (input) => {
+	input = JSON.parse(input).text
+	if (!input) return out({status: 'error', text: 'missing input'})
+
+	request('http://words.bighugelabs.com/api/2'
+		+ `/${key}/${encodeURIComponent(input)}/json`
+		, {json: true}, (err, _, body) => {
+			if (err) return out({status: 'error', text: err.message})
+			if (!body) return out({status: 'error', text: 'no translations'})
+			out({status: 'ok', text: Object.keys(body)
+				.map((type) => type + ' – ' + body[type].syn.join(','))
+				.join('\n')
+			})
+		})
+})
