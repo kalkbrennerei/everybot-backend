@@ -11,13 +11,17 @@ process.stdin.pipe(sink())
 	if (!input.text) return out({status: 'error', text: 'missing keyword'})
 	input = input.text.trim().toLowerCase()
 
-	if (input in emojis.lib) return out({
-		status: 'ok',
-		text: emojis.lib[input].char
-	})
 	const completions = Object.keys(emojis.lib)
 		.filter((name) => name.substr(0, input.length) === input)
-		.map((name) => emojis.lib[name].char)
+		.map((name) => ({
+			name: name,
+			text: emojis.lib[name].char
+		}))
+
+	if (input in emojis.lib) return out({
+		status: 'ok', completions,
+		text: emojis.lib[input].char
+	})
 	if (completions.length > 0) return out({status: 'ok', completions})
 
 	out({status: 'error', text: 'couldnt find one'})
