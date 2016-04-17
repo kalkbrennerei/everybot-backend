@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+'use strict'
+
+const sink = require('stream-sink')
+
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+
+process.stdin.pipe(sink())
+.on('data', (input) => {
+	input = JSON.parse(input)
+	if (!input.text && (!input.latitude || !input.longitude))
+		return out({status: 'error', text: 'missing coords or text'})
+
+	let url = 'https://google.com/maps'
+	if (input.text) url += `/search/${encodeURI(input.text)}`
+	if (input.latitude && input.longitude)
+		url += `/@${input.latitude},${input.longitude},14z`
+	out({status: 'ok', text: url})
+})
