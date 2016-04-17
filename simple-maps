@@ -19,5 +19,9 @@ process.stdin.pipe(sink())
 		status: 'ok',
 		text: 'https://google.com/maps/search/Copenhagen'
 	})
+	else if (input === 'location') out ({
+		status: 'ok',
+		text: 'https://google.com/maps/search/Microsoft%20Copenhagen'
+	})
 	else out({status: 'error', text: 'unknown location'})
 })
