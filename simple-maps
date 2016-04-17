@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+'use strict'
+
+const sink = require('stream-sink')
+
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+
+process.stdin.pipe(sink())
+.on('data', (input) => {
+	input = JSON.parse(input).text
+	if (!input) return out({status: 'error', text: 'missing location'})
+	input = input.toLowerCase()
+
+	if (input === 'home') out({
+		status: 'ok',
+		text: 'https://google.com/maps/search/Berlin'
+	})
+	else if (input === 'work') out({
+		status: 'ok',
+		text: 'https://google.com/maps/search/Copenhagen'
+	})
+	else out({status: 'error', text: 'unknown location'})
+})
