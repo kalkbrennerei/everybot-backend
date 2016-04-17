@@ -2,18 +2,26 @@
 'use strict'
 
 const sink = require('stream-sink')
+const mapquest = require('mapquest')
 
 const out = (d) => {process.stdout.write(JSON.stringify(d))}
+const token = 'YLXVfzibUTueQcJh8T7RAdAmyiE1bTmg'
+
+const geocode = (query, cb) =>
+	mapquest.geocode({address: query, key: token}, cb)
+const maps = (loc) =>
+	`https://google.com/maps/@${loc.latitude},${loc.longitude},14z`
 
 process.stdin.pipe(sink())
 .on('data', (input) => {
 	input = JSON.parse(input)
-	if (!input.text && (!input.latitude || !input.longitude))
-		return out({status: 'error', text: 'missing coords or text'})
 
-	let url = 'https://google.com/maps'
-	if (input.text) url += `/search/${encodeURI(input.text)}`
-	if (input.latitude && input.longitude)
-		url += `/@${input.latitude},${input.longitude},14z`
-	out({status: 'ok', text: url})
+	if (input.text) geocode(input.text, (err, loc) =>
+		out({status: 'ok', text: maps({
+			  latitude:  loc.latLng.lat
+			, longitude: loc.latLng.lng
+		})}))
+	else if (input.latitude && input.longitude)
+		out({status: 'ok', text: maps(input)})
+	else return out({status: 'error', text: 'missing coords or text'})
 })

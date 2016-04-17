@@ -12,6 +12,7 @@
   "dependencies": {
     "emojilib": "^2.0.2",
     "express": "^4.13.4",
+    "mapquest": "^0.2.0",
     "request": "^2.71.0",
     "stream-sink": "^1.2.0",
     "through2": "^2.0.1"
