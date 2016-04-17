@@ -12,7 +12,7 @@ def translate(text, to_language):
      from_language = translator.detect_language(text)
      output_text = translator.translate(text, to_language)
 
-     return json.dumps({"original":text, "translated":output_text})
+     return json.dumps({"status": "ok", "original":text, "translated":output_text})
 
 
 #HP
