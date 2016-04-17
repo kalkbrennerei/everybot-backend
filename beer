@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+const sink = require('stream-sink')
+const request = require('request')
+
+const out = (d) => {process.stdout.write(JSON.stringify(d))}
+const token = 'MDowMjc5ZTg3NC0wNDdjLTExZTYtOTYzZS01ZjYyNDg5MmVkOGE6Nmk1bnFtSUNIanhyUXNBNEVjZEJHYlpTcFRwQTRnalNXeDcx'
+
+process.stdin.pipe(sink())
+.on('data', (input) => {
+	input = JSON.parse(input).text
+	if (!input) return out({status: 'error', text: 'missing input'})
+	input = input.trim().toLowerCase()
+
+	request('https://lcboapi.com/products.json?'
+		+ `q=${encodeURIComponent(input)}`
+		+ `&access_key=${token}`
+		, {json: true}, (err, _, body) => {
+			if (err) return out({status: 'error', text: err.message})
+			const result = body.result
+				.map((beer) => [
+					  beer.name
+					, '(' + (beer.price_in_cents / 100) + '$)'
+					, 'from'
+					, beer.primary_category + beer.secondary_category
+				].join(' '))
+				.join('\n')
+			out({status: 'ok', text: result})
+		})
+})
