@@ -16,12 +16,15 @@ payload = {'token': 'VhpaUCnCRlQBJnGomIAdLFGUEVhtLUVHGnispJAZ'}
 r = requests.get('https://api.discogs.com/database/search?release_title='+title, params=payload)
 
 result=json.loads(r.text)
-ID=result['results'][1]['id']
+if len(result['results'])>0:
+	ID=result['results'][1]['id']
 
-r2 = requests.get('https://api.discogs.com/artists/'+str(ID), params = payload)
+	r2 = requests.get('https://api.discogs.com/artists/'+str(ID), params = payload)
 
-artist=json.loads(r2.text)
-if 'name' in artist:
-	print json.dumps({'status': 'ok', 'text': artist['name']})
+	artist=json.loads(r2.text)
+	if 'name' in artist:
+		print json.dumps({'status': 'ok', 'text': artist['name']})
+	else:
+		print json.dumps({'status': 'error', 'text': 'Song not found'})
 else:
-	print json.dumps({'status': 'error', 'text': 'Song not found'})
+	print json.dumps({'status': 'error', 'text': 'Song not found'})		
