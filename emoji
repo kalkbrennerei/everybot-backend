@@ -15,6 +15,11 @@ process.stdin.pipe(sink())
 		status: 'ok',
 		text: emojis.lib[input].char
 	})
-	else out({status: 'error', text: 'couldnt find one'})
+	const completions = Object.keys(emojis.lib)
+		.filter((name) => name.substr(0, input.length) === input)
+		.map((name) => emojis.lib[name].char)
+	if (completions.length > 0) return out({status: 'ok', completions})
+
+	out({status: 'error', text: 'couldnt find one'})
 
 })
