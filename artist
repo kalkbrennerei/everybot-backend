@@ -9,7 +9,7 @@ import requests
 for line in fileinput.input():
 	text = json.loads(line)
 	
-title = text['title']
+title = text['text']
 payload = {'token': 'VhpaUCnCRlQBJnGomIAdLFGUEVhtLUVHGnispJAZ'}
 
 
