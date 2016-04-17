@@ -12,20 +12,14 @@ for line in fileinput.input():
 	m = re.match('^(\d+)\s*([\+\-\*\/])\s*(\d+)$', calc['text'])
 	num1 = m.group(1)
 	num2 = m.group(3)
-	#if m.groups(1)
 
-	print(m.group(1), m.group(2), m.group(3))
 	if m.group(2) == '+':
 		print(json.dumps({"status": "ok", "text": int(num1) + int(num2)}))
-		#print(int(num1) + int(num2))
 	elif m.group(2) == '-':
 		print(json.dumps({"status": "ok", "text": int(num1) - int(num2)}))
-		#print(int(num1) - int(num2))
 	elif m.group(2) == '*':
 		print(json.dumps({"status": "ok", "text": int(num1) * int(num2)}))
-		#print(int(num1) * int(num2))
 	elif m.group(2) == '/':
 		print(json.dumps({"status": "ok", "text": int(num1) / int(num2)}))
-		#print(int(num1) / int(num2))
 	else:
 		print(json.dumps({"status": "error", "text": "error"}))
